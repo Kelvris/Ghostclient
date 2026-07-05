@@ -62,6 +62,7 @@ DISCORD TERMS OF SERVICE: Section 3.1 — Automation
 |---------|---------|-------------|----------|
 | `ping` | `p`, `latency` | Check your bot's connection speed | ❌ |
 | `afk` | `brb`, `away` | Set/remove AFK with a reason | ✅ |
+| `prefix` | `setprefix` | View or change command prefix for this account | ❌ |
 | `help` | `h`, `commands` | Lists all commands | ✅ |
 | `ononly` | `panic`, `lockdown`, `kill` | **KILL SWITCH** — disables everything except itself | ✅ |
 
@@ -79,6 +80,36 @@ Run `.ononly` and:
 - Run `.ononly` again to restore everything
 
 Perfect for when someone's acting suspicious and you need to go **completely dark**.
+
+### 👑 Head Account Mode
+
+Running 5 accounts but tired of typing commands in 5 different chats? **Head Account Mode** lets you control everything from one place.
+
+**How it works:**
+- **Head account** (default: `account1`) — processes commands
+- **Other accounts** — only handle AFK auto-responses, ignore commands
+- Toggle it in `config.json`
+
+```json
+{
+  "headAccount": true,           // default: true
+  "headAccountId": "account1"    // default: first account
+}
+```
+
+Set `"headAccount": false` if you want every account to process commands.
+
+### 🔧 Per-Account Prefix
+
+Each account can have its own command prefix — no more fighting over `.`:
+
+```
+.prefix             → shows current prefix (e.g. ".")
+.prefix !           → changes prefix to "!"
+!prefix             → now works with the new prefix
+```
+
+Prefixes are saved in the database and survive restarts. Fallback is whatever's in `config.json`.
 
 ### 👥 Multi-Account
 
@@ -131,6 +162,8 @@ cp .env.example .env
 ```json
 {
   "prefix": ".",
+  "headAccount": true,
+  "headAccountId": "account1",
   "minDelay": 4000,
   "maxDelay": 15000,
   "typingMin": 1000,
@@ -176,6 +209,7 @@ Ghostclient/
 │   ├── repositories/
 │   │   ├── afkRepository.js         # AFK data go brr
 │   │   ├── commandLogRepository.js  # 📝 logging
+│   │   ├── settingsRepository.js    # ⚙️ per-account settings (prefix)
 │   │   └── stateRepository.js       # Lockdown state persistence
 │   ├── defense/
 │   │   ├── humanizer.js             # 🔥 The real MVP — anti-detection engine
@@ -185,6 +219,7 @@ Ghostclient/
 │       └── core/
 │           ├── ping.js              # 🏓
 │           ├── afk.js               # 🛌
+│           ├── prefix.js            # 🔄 per-account prefix
 │           ├── help.js              # 📖
 │           └── ononly.js            # ☠️ KILL SWITCH
 ├── config.example.json              # Template for your config
@@ -222,6 +257,8 @@ Ghostclient/
 | `maxDelay` | 15000ms | 1000–60000 | Maximum wait before responding |
 | `typingMin` | 1000ms | 500–10000 | Minimum typing indicator duration |
 | `typingMax` | 3000ms | 500–15000 | Maximum typing indicator duration |
+| `headAccount` | `true` | `true` / `false` | Only head account processes commands |
+| `headAccountId` | `"account1"` | any account ID | Which account is the head |
 
 ---
 
