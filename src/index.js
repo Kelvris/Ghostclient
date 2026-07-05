@@ -39,8 +39,14 @@ for (const { client } of clientEntries) {
       // Ignore own messages
       if (message.author.id === client.user.id) return;
 
-      // Handle AFK mentions (defense system) — account aware
+      // AFK mentions work for ALL accounts (always)
       await handleMention(message, client);
+
+      // Head account mode: only the head account processes commands
+      // Non-head accounts only do AFK auto-responses
+      if (config.headAccount && client.accountId !== config.headAccountId) {
+        return;
+      }
 
       // Handle commands
       await handleCommand(message, client);
