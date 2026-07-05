@@ -1,0 +1,11 @@
+{
+  "prefix": ".",
+  "accounts": [
+    { "id": "main", "token": "your_token_here" },
+    { "id": "alt", "token": "your_other_token_here", "prefix": "." }
+  ],
+  "minDelay": 4000,
+  "maxDelay": 15000,
+  "typingMin": 1000,
+  "typingMax": 3000
+}

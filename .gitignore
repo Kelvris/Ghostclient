@@ -1,0 +1,7 @@
+node_modules/
+.env
+*.db
+.vscode/
+.DS_Store
+config.json
+.opencode/
