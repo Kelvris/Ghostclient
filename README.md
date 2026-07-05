@@ -87,8 +87,8 @@ Run multiple Discord accounts simultaneously from a single terminal:
 ```json
 {
   "accounts": [
-    { "id": "main", "token": "token1" },
-    { "id": "alt", "token": "token2", "prefix": ">" }
+    { "id": "main", "prefix": "." },
+    { "id": "alt", "prefix": ">" }
   ]
 }
 ```
@@ -126,25 +126,16 @@ cp .env.example .env
 
 ### Configuration
 
-**Single account (simple):**
-```json
-{
-  "prefix": ".",
-  "token": "your_token_here",
-  "minDelay": 4000,
-  "maxDelay": 15000,
-  "typingMin": 1000,
-  "typingMax": 3000
-}
-```
+**Rule:** `config.json` = settings only · `.env` = secrets only. Never the twain shall meet.
 
-**Multi-account (god mode):**
+#### 1. `config.json` (settings — public-safe)
+
 ```json
 {
   "prefix": ".",
   "accounts": [
-    { "id": "main", "token": "your_token_here" },
-    { "id": "alt", "token": "your_other_token", "prefix": ">" }
+    { "id": "main", "prefix": "." },
+    { "id": "alt", "prefix": ">" }
   ],
   "minDelay": 4000,
   "maxDelay": 15000,
@@ -152,6 +143,21 @@ cp .env.example .env
   "typingMax": 3000
 }
 ```
+
+No tokens here. **Ever.**
+
+#### 2. `.env` (secrets — keep this private!)
+
+```bash
+# Single account (simple):
+DISCORD_TOKEN=your_token_here
+
+# Multi-account (match IDs from config.json):
+GHOST_TOKEN_MAIN=your_main_token
+GHOST_TOKEN_ALT=your_alt_token
+```
+
+The app matches `GHOST_TOKEN_<ID>` to the `id` field in `config.json` automatically. No ID in config? It auto-creates accounts from any `GHOST_TOKEN_*` it finds.
 
 ### Run It
 

@@ -1,8 +1,8 @@
 {
   "prefix": ".",
   "accounts": [
-    { "id": "main", "token": "your_token_here" },
-    { "id": "alt", "token": "your_other_token_here", "prefix": "." }
+    { "id": "main", "prefix": "." },
+    { "id": "alt", "prefix": ">" }
   ],
   "minDelay": 4000,
   "maxDelay": 15000,
