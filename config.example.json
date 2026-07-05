@@ -1,9 +1,5 @@
 {
   "prefix": ".",
-  "accounts": [
-    { "id": "main", "prefix": "." },
-    { "id": "alt", "prefix": ">" }
-  ],
   "minDelay": 4000,
   "maxDelay": 15000,
   "typingMin": 1000,

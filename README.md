@@ -82,24 +82,22 @@ Perfect for when someone's acting suspicious and you need to go **completely dar
 
 ### 👥 Multi-Account
 
-Run multiple Discord accounts simultaneously from a single terminal:
+Run multiple Discord accounts simultaneously from a single terminal.
 
-```json
-{
-  "accounts": [
-    { "id": "main", "prefix": "." },
-    { "id": "alt", "prefix": ">" }
-  ]
-}
+**No config changes needed.** Just add numbered tokens to `.env`:
+
+```bash
+TOKEN_1=your_first_token
+TOKEN_2=your_second_token
+TOKEN_3=your_third_token
 ```
 
-Each account has:
-- Its own prefix (or falls back to default)
-- Its own AFK state (isolated from others)
+Accounts are auto-named `account1`, `account2`, etc. Each one has:
+- Isolated AFK state
 - Its own lockdown state
 - All features, independently
 
-One process. Multiple ghosts. Maximum chaos.
+One `.env`. Multiple ghosts. Maximum chaos.
 
 ---
 
@@ -126,17 +124,13 @@ cp .env.example .env
 
 ### Configuration
 
-**Rule:** `config.json` = settings only · `.env` = secrets only. Never the twain shall meet.
+**Rule:** `config.json` = settings · `.env` = secrets. Simple.
 
 #### 1. `config.json` (settings — public-safe)
 
 ```json
 {
   "prefix": ".",
-  "accounts": [
-    { "id": "main", "prefix": "." },
-    { "id": "alt", "prefix": ">" }
-  ],
   "minDelay": 4000,
   "maxDelay": 15000,
   "typingMin": 1000,
@@ -144,20 +138,20 @@ cp .env.example .env
 }
 ```
 
-No tokens here. **Ever.**
+No tokens. No accounts. Just settings.
 
 #### 2. `.env` (secrets — keep this private!)
 
 ```bash
-# Single account (simple):
+# Single account:
 DISCORD_TOKEN=your_token_here
 
-# Multi-account (match IDs from config.json):
-GHOST_TOKEN_MAIN=your_main_token
-GHOST_TOKEN_ALT=your_alt_token
+# Multi-account (no config changes needed):
+TOKEN_1=your_first_token
+TOKEN_2=your_second_token
 ```
 
-The app matches `GHOST_TOKEN_<ID>` to the `id` field in `config.json` automatically. No ID in config? It auto-creates accounts from any `GHOST_TOKEN_*` it finds.
+That's it. `TOKEN_1` becomes `account1`, `TOKEN_2` becomes `account2`, and so on.
 
 ### Run It
 

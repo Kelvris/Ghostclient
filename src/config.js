@@ -8,7 +8,7 @@ dotenv.config();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 
-// ─── Load config.json (settings only, NO tokens) ───────────────────────────
+// ─── Load config.json (settings only — NO tokens, NO accounts) ─────────────
 let configFile = {};
 const configPath = join(root, 'config.json');
 const examplePath = join(root, 'config.example.json');
@@ -19,35 +19,28 @@ if (existsSync(configPath)) {
   configFile = JSON.parse(readFileSync(examplePath, 'utf-8'));
 }
 
-// ─── Build accounts: IDs from config, tokens from ENVIRONMENT ONLY ─────────
+const prefix = configFile.prefix || '.';
+
+// ─── Build accounts: tokens from .env ONLY ─────────────────────────────────
 let accounts = [];
 
-// 1) Check for GHOST_TOKEN_<ID> env vars (multi-account via .env)
-const ghostTokenKeys = Object.keys(process.env).filter(k => k.startsWith('GHOST_TOKEN_'));
-if (ghostTokenKeys.length > 0) {
-  // If config.json has accounts, use their IDs + prefixes
-  if (configFile.accounts && Array.isArray(configFile.accounts) && configFile.accounts.length > 0) {
-    for (const acc of configFile.accounts) {
-      const id = acc.id || 'default';
-      const token = process.env[`GHOST_TOKEN_${id.toUpperCase()}`];
-      if (token) {
-        accounts.push({
-          id,
-          token,
-          prefix: acc.prefix || configFile.prefix || '.',
-        });
-      }
-    }
-  } else {
-    // No accounts in config — auto-create from env vars
-    for (const key of ghostTokenKeys) {
-      const id = key.replace('GHOST_TOKEN_', '').toLowerCase();
-      accounts.push({
-        id,
-        token: process.env[key],
-        prefix: configFile.prefix || '.',
-      });
-    }
+// 1) Scan for TOKEN_1, TOKEN_2, ... TOKEN_N (multi-account)
+const tokenKeys = Object.keys(process.env)
+  .filter(k => /^TOKEN_\d+$/.test(k))
+  .sort((a, b) => {
+    const na = parseInt(a.split('_')[1], 10);
+    const nb = parseInt(b.split('_')[1], 10);
+    return na - nb;
+  });
+
+if (tokenKeys.length > 0) {
+  for (const key of tokenKeys) {
+    const num = key.split('_')[1];
+    accounts.push({
+      id: `account${num}`,
+      token: process.env[key],
+      prefix,
+    });
   }
 }
 
@@ -56,7 +49,7 @@ if (accounts.length === 0 && process.env.DISCORD_TOKEN) {
   accounts.push({
     id: 'default',
     token: process.env.DISCORD_TOKEN,
-    prefix: process.env.PREFIX || configFile.prefix || '.',
+    prefix,
   });
 }
 
@@ -71,9 +64,10 @@ if (accounts.length === 0) {
   console.error('    # Single account:');
   console.error('    DISCORD_TOKEN=your_token_here');
   console.error('');
-  console.error('    # Multi-account (match IDs from config.json):');
-  console.error('    GHOST_TOKEN_MAIN=token_for_main');
-  console.error('    GHOST_TOKEN_ALT=token_for_alt');
+  console.error('    # Multi-account:');
+  console.error('    TOKEN_1=your_first_token');
+  console.error('    TOKEN_2=your_second_token');
+  console.error('    TOKEN_3=your_third_token');
   console.error('');
   process.exit(1);
 }
@@ -81,14 +75,14 @@ if (accounts.length === 0) {
 // Validate
 for (const acc of accounts) {
   if (!acc.token) {
-    console.error(`[FATAL] Account "${acc.id}" has no token. Set GHOST_TOKEN_${acc.id.toUpperCase()} in .env`);
+    console.error(`[FATAL] Account "${acc.id}" has an empty token.`);
     process.exit(1);
   }
 }
 
 const config = {
   accounts,
-  prefix: configFile.prefix || '.',
+  prefix,
   minDelay: configFile.minDelay || 4000,
   maxDelay: configFile.maxDelay || 15000,
   typingMin: configFile.typingMin || 1000,
