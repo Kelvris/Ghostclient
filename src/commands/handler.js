@@ -107,8 +107,8 @@ export async function handleCommand(message, client) {
   try {
     const response = await cmd.execute(message, args, client);
 
-    // Auto-delete in guilds if configured
-    if (cmd.deleteAfter && message.guild) {
+    // Auto-delete command + response if configured
+    if (cmd.deleteAfter) {
       // Delete command message after delay
       setTimeout(async () => {
         try { await message.delete(); } catch {}
