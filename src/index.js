@@ -36,20 +36,17 @@ for (const { client } of clientEntries) {
     },
 
     async onMessage(message, client) {
-      // Ignore own messages
+      // Handle commands FIRST — selfbot must respond to its own prefixed messages
+      // Only head account processes commands
+      if (!config.headAccount || client.accountId === config.headAccountId) {
+        await handleCommand(message, client);
+      }
+
+      // Everything below: skip own messages (AFK mentions, etc.)
       if (message.author.id === client.user.id) return;
 
       // AFK mentions work for ALL accounts (always)
       await handleMention(message, client);
-
-      // Head account mode: only the head account processes commands
-      // Non-head accounts only do AFK auto-responses
-      if (config.headAccount && client.accountId !== config.headAccountId) {
-        return;
-      }
-
-      // Handle commands
-      await handleCommand(message, client);
     },
 
     onError(err, client) {
