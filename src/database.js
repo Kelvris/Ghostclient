@@ -38,6 +38,12 @@ db.exec(`
     lockdown   INTEGER NOT NULL DEFAULT 0,
     updated_at TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS account_settings (
+    account_id TEXT PRIMARY KEY,
+    prefix     TEXT,
+    updated_at TEXT NOT NULL
+  );
 `);
 
 logger.success('Database initialized');
