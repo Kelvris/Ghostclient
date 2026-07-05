@@ -9,12 +9,20 @@ export function randomDelay(minMs, maxMs) {
 
 export async function simulateTyping(channel, minMs, maxMs) {
   const duration = randomInt(minMs, maxMs);
-  try {
-    await channel.startTyping();
-    await new Promise(resolve => setTimeout(resolve, duration));
-  } finally {
-    try { await channel.stopTyping(true); } catch {}
-  }
+
+  // Send initial typing indicator
+  try { await channel.sendTyping(); } catch {}
+
+  // Periodically refresh typing (indicator lasts ~10s naturally)
+  const interval = setInterval(async () => {
+    try { await channel.sendTyping(); } catch {}
+  }, 8000);
+
+  // Wait for the simulated typing duration
+  await new Promise(resolve => setTimeout(() => {
+    clearInterval(interval);
+    resolve();
+  }, duration));
 }
 
 export function getRandomResponse(variations) {
