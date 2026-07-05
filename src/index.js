@@ -3,7 +3,7 @@ import { logger } from './logger.js';
 import db from './database.js'; // run migrations
 import { createClients, setupClient, loginAll, shutdownAll } from './clientManager.js';
 import { registerCommands, handleCommand } from './commands/handler.js';
-import { initAFKManager, handleMention } from './defense/afkManager.js';
+import { initAFKManager, handleMention, checkAFK, unsetAFK } from './defense/afkManager.js';
 import { getStoredPrefix } from './repositories/settingsRepository.js';
 
 logger.info(`Starting Ghostclient with ${config.accounts.length} account(s)...`);
@@ -42,8 +42,13 @@ for (const { client } of clientEntries) {
         await handleCommand(message, client);
       }
 
-      // Everything below: skip own messages (AFK mentions, etc.)
-      if (message.author.id === client.user.id) return;
+      // Auto-remove AFK when the user sends any message
+      if (message.author.id === client.user.id) {
+        if (checkAFK(client)) {
+          unsetAFK(client);
+        }
+        return; // skip everything else for own messages
+      }
 
       // AFK mentions work for ALL accounts (always)
       await handleMention(message, client);
