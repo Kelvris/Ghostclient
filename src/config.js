@@ -90,6 +90,7 @@ const config = {
   prefix,
   headAccount,
   headAccountId,
+  dmDeleteAfter: configFile.dmDeleteAfter ?? 15000,
   minDelay: configFile.minDelay || 4000,
   maxDelay: configFile.maxDelay || 15000,
   typingMin: configFile.typingMin || 1000,

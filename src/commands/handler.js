@@ -92,10 +92,10 @@ export async function handleCommand(message, client) {
     // Send response with auto-delete
     try {
       const response = await cmd.execute(message, args, client);
-      if (response && cmd.deleteAfter) {
+      if (response && config.dmDeleteAfter) {
         setTimeout(async () => {
           try { await response.delete(); } catch {}
-        }, cmd.deleteAfter);
+        }, config.dmDeleteAfter);
       }
     } catch (err) {
       logger.error(`Error executing ${cmd.name}: ${err.message}`);
