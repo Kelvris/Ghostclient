@@ -9,6 +9,11 @@
   <img alt="License" src="https://img.shields.io/badge/License-MIT-yellow"/>
   <img alt="Stealth Level" src="https://img.shields.io/badge/Stealth-Ninja%20Grade-8A2BE2"/>
   <img alt="Discord ToS" src="https://img.shields.io/badge/Discord%20ToS-Voided%20With%20Style-ff69b4"/>
+  <a href="https://discord.gg/p2CK5guHZx"><img alt="Discord" src="https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white"/></a>
+</p>
+
+<p align="center">
+  Ghostclient is a stealth-first Discord selfbot with a humanizer engine, AFK auto-response, anti-spam cooldown, lockdown mode, and multi-account support. It automates user accounts with randomized delays and varied responses to appear human.
 </p>
 
 ---
