@@ -46,8 +46,8 @@ export async function registerCommands(client) {
 }
 
 export async function handleCommand(message, client) {
-  // Ignore bot messages (but NOT self — this is a selfbot)
-  if (message.author.bot) return;
+  // Only respond to our own messages — ignore everyone else
+  if (message.author.id !== client.user.id) return;
 
   // Use per-account prefix, fallback to global
   const prefix = client.accountPrefix || config.prefix;
