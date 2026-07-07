@@ -80,16 +80,9 @@ for (const acc of accounts) {
   }
 }
 
-// Head account: only this account processes commands
-// Set to false to let all accounts process commands
-const headAccount = configFile.headAccount !== false;
-const headAccountId = configFile.headAccountId || (accounts.length > 0 ? accounts[0].id : 'default');
-
 const config = {
   accounts,
   prefix,
-  headAccount,
-  headAccountId,
   dmDeleteAfter: configFile.dmDeleteAfter ?? 15000,
   minDelay: configFile.minDelay || 4000,
   maxDelay: configFile.maxDelay || 15000,

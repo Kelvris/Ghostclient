@@ -86,24 +86,6 @@ Run `.ononly` and:
 
 Perfect for when someone's acting suspicious and you need to go **completely dark**.
 
-### 👑 Head Account Mode
-
-Running 5 accounts but tired of typing commands in 5 different chats? **Head Account Mode** lets you control everything from one place.
-
-**How it works:**
-- **Head account** (default: `account1`) — processes commands
-- **Other accounts** — only handle AFK auto-responses, ignore commands
-- Toggle it in `config.json`
-
-```json
-{
-  "headAccount": true,           // default: true
-  "headAccountId": "account1"    // default: first account
-}
-```
-
-Set `"headAccount": false` if you want every account to process commands.
-
 ### 🔧 Per-Account Prefix
 
 Each account can have its own command prefix — no more fighting over `.`:
@@ -167,8 +149,6 @@ cp .env.example .env
 ```json
 {
   "prefix": ".",
-  "headAccount": true,
-  "headAccountId": "account1",
   "minDelay": 4000,
   "maxDelay": 15000,
   "typingMin": 1000,
@@ -262,8 +242,6 @@ Ghostclient/
 | `maxDelay` | 15000ms | 1000–60000 | Maximum wait before responding |
 | `typingMin` | 1000ms | 500–10000 | Minimum typing indicator duration |
 | `typingMax` | 3000ms | 500–15000 | Maximum typing indicator duration |
-| `headAccount` | `true` | `true` / `false` | Only head account processes commands |
-| `headAccountId` | `"account1"` | any account ID | Which account is the head |
 
 ---
 

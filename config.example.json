@@ -1,7 +1,5 @@
 {
   "prefix": ".",
-  "headAccount": true,
-  "headAccountId": "account1",
   "dmDeleteAfter": 15000,
   "minDelay": 4000,
   "maxDelay": 15000,

@@ -27,20 +27,11 @@ for (const { client } of clientEntries) {
         client.accountPrefix = storedPrefix;
         logger.info(`[${client.accountId}] Using stored prefix: "${storedPrefix}"`);
       }
-
-      // Set status
-      client.user.setPresence({
-        status: 'online',
-        activities: [],
-      });
     },
 
     async onMessage(message, client) {
-      // Handle commands FIRST — selfbot must respond to its own prefixed messages
-      // Only head account processes commands
-      if (!config.headAccount || client.accountId === config.headAccountId) {
-        await handleCommand(message, client);
-      }
+      // Handle commands — every account processes its own commands independently
+      await handleCommand(message, client);
 
       // Auto-remove AFK when the user sends any message
       if (message.author.id === client.user.id) {

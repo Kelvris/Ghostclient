@@ -44,6 +44,17 @@ db.exec(`
     prefix     TEXT,
     updated_at TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS server_backups (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_id      TEXT NOT NULL,
+    guild_id        TEXT NOT NULL,
+    guild_name      TEXT,
+    blueprint       TEXT NOT NULL,
+    backup_type     TEXT NOT NULL DEFAULT 'pre_clone',
+    created_at      TEXT NOT NULL,
+    UNIQUE(account_id, guild_id, backup_type)
+  );
 `);
 
 logger.success('Database initialized');
